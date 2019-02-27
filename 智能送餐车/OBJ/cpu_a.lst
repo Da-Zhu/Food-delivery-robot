@@ -460,11 +460,11 @@ ARM Macro Assembler    Page 8
 
 
 interwork --depend=..\obj\cpu_a.d -o..\obj\cpu_a.o -I"D:\1111111\32F7\Practice\
-国创\例4-1 UCOSIII移植\USER\RTE" -IF:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0
- -IF:\Keil_v5\ARM\CMSIS\Include -IF:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\
-Drivers\CMSIS\Device\ST\STM32F7xx\Include --predefine="__UVISION_VERSION SETA 5
-14" --predefine="STM32F767xx SETA 1" --list=..\obj\cpu_a.lst ..\UCOSIII\uC-CPU\
-ARM-Cortex-M4\RealView\cpu_a.asm
+Food delivery robot\Food-delivery-robot\智能送餐车\USER\RTE" -IF:\Keil_v5\ARM\P
+ACK\Keil\STM32F7xx_DFP\2.7.0 -IF:\Keil_v5\ARM\CMSIS\Include -IF:\Keil_v5\ARM\PA
+CK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include --predefi
+ne="__UVISION_VERSION SETA 514" --predefine="STM32F767xx SETA 1" --list=..\obj\
+cpu_a.lst ..\UCOSIII\uC-CPU\ARM-Cortex-M4\RealView\cpu_a.asm
 
 
 

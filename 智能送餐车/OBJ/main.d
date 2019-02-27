@@ -123,3 +123,14 @@
 ..\obj\main.o: ..\HARDWARE\PCF8574\pcf8574.h
 ..\obj\main.o: ..\HARDWARE\IIC\myiic.h
 ..\obj\main.o: ..\ATKQR\atk_qrdecode.h
+..\obj\main.o: ..\HARDWARE\LIDAR\lidar.h
+..\obj\main.o: ..\HARDWARE\TOUCH\touch.h
+..\obj\main.o: ..\HARDWARE\TOUCH\ott2001a.h
+..\obj\main.o: ..\HARDWARE\TOUCH\gt9147.h
+..\obj\main.o: ..\HARDWARE\TOUCH\ft5206.h
+..\obj\main.o: ..\HARDWARE\TOUCH\gt9271.h
+..\obj\main.o: ..\HARDWARE\ULTRASONIC\ultrasonic.h
+..\obj\main.o: ..\HARDWARE\TIMER\timer.h
+..\obj\main.o: ..\USMART\usmart.h
+..\obj\main.o: ..\USMART\usmart_str.h
+..\obj\main.o: ..\HARDWARE\RS485\rs485.h

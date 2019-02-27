@@ -21,34 +21,40 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.14.0_KEIL
 Dialog DLL:      TCM.DLL V1.14.4.0
  
 <h2>Project:</h2>
-D:\1111111\32F7\Practice\国创\例4-1 UCOSIII移植\USER\UCOSIII.uvprojx
-Project File Date:  11/29/2018
+D:\1111111\32F7\Practice\Food delivery robot\Food-delivery-robot\智能送餐车\USER\UCOSIII.uvprojx
+Project File Date:  02/26/2019
 
 <h2>Output:</h2>
 Build target 'UCOSIII'
 compiling main.c...
-main.c(100): warning:  #177-D: variable "err" was declared but never referenced
-        OS_ERR err;
-main.c(101): warning:  #177-D: variable "cpu_sr" was declared but never referenced
-        CPU_SR_ALLOC();
-main.c(125): warning:  #177-D: variable "err" was declared but never referenced
-        OS_ERR err;
-main.c(126): warning:  #177-D: variable "cpu_sr" was declared but never referenced
-        CPU_SR_ALLOC();
-main.c(144): warning:  #177-D: variable "cpu_sr" was declared but never referenced
-        CPU_SR_ALLOC();
-main.c(389): warning:  #177-D: variable "key" was declared but never referenced
+main.c(162): warning:  #177-D: variable "fac" was declared but never referenced
+        float fac;
+main.c(415): warning:  #550-D: variable "key" was set but never used
+        u8 key;
+main.c(513): warning:  #177-D: variable "key" was declared but never referenced
         u8 key;                                            
-main.c(390): warning:  #177-D: variable "i" was declared but never referenced
+main.c(514): warning:  #177-D: variable "i" was declared but never referenced
         u8 i;
-main.c: 7 warnings, 0 errors
+main.c(571): warning:  #177-D: variable "num" was declared but never referenced
+        long num;
+main.c(657): warning:  #177-D: variable "temp" was declared but never referenced
+        u8 rs485buf[10],temp,i=0,t=0;
+main.c(657): warning:  #177-D: variable "t" was declared but never referenced
+        u8 rs485buf[10],temp,i=0,t=0;
+main.c(692): warning:  #177-D: variable "cpu_sr" was declared but never referenced
+        CPU_SR_ALLOC();
+main.c(717): warning:  #177-D: variable "cpu_sr" was declared but never referenced
+        CPU_SR_ALLOC();
+main.c(735): warning:  #177-D: variable "cpu_sr" was declared but never referenced
+        CPU_SR_ALLOC();
+main.c: 10 warnings, 0 errors
 linking...
-Program Size: Code=100010 RO-data=25850 RW-data=368 ZI-data=33758312  
+Program Size: Code=108036 RO-data=21916 RW-data=916 ZI-data=33769700  
 FromELF: creating hex file...
-"..\OBJ\Template.axf" - 0 Error(s), 7 Warning(s).
+"..\OBJ\Template.axf" - 0 Error(s), 10 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
-  D:\1111111\32F7\Practice\国创\例4-1 UCOSIII移植\USER\RTE
+  D:\1111111\32F7\Practice\Food delivery robot\Food-delivery-robot\智能送餐车\USER\RTE
   F:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0
 
 <h2>Collection of Component Files used:</h2>
