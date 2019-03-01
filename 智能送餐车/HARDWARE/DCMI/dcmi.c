@@ -151,15 +151,15 @@ void DCMI_IRQHandler(void)
 }
 
 u8 ov_frame=0;  						//帧率
-//extern u8 	readok;		//采集完成一帧图像标志
-//extern u16  dcmi_curline;
+extern u8 	readok;		//采集完成一帧图像标志
+extern u16  dcmi_curline;
 
 //捕获到一帧图像处理函数
 //hdcmi:DCMI句柄
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
-//	readok=1;		
-//	dcmi_curline=0;
+	readok=1;		
+	dcmi_curline=0;
 	LED1_Toggle;
 	ov_frame++; 
   //重新使能帧中断,因为HAL_DCMI_IRQHandler()函数会关闭帧中断

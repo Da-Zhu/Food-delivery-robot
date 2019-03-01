@@ -131,6 +131,3 @@
 ..\obj\main.o: ..\HARDWARE\TOUCH\gt9271.h
 ..\obj\main.o: ..\HARDWARE\ULTRASONIC\ultrasonic.h
 ..\obj\main.o: ..\HARDWARE\TIMER\timer.h
-..\obj\main.o: ..\USMART\usmart.h
-..\obj\main.o: ..\USMART\usmart_str.h
-..\obj\main.o: ..\HARDWARE\RS485\rs485.h

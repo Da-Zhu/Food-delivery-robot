@@ -24,8 +24,8 @@
 #include "touch.h"
 #include "ultrasonic.h"
 #include "timer.h"
-#include "usmart.h"
-#include "rs485.h"
+//#include "usmart.h"
+//#include "rs485.h"
 
 /************************************************
  ALIENTEK 阿波罗STM32F7开发板 UCOSIII实验
@@ -89,7 +89,7 @@ void ultrasonic_task(void *p_arg);
 //任务优先级
 #define AGV_guide_TASK_PRIO		4
 //任务堆栈大小	
-#define AGV_guide_STK_SIZE 		512
+#define AGV_guide_STK_SIZE 		128
 //任务控制块
 OS_TCB AGV_guideTaskTCB;
 //任务堆栈	
@@ -167,16 +167,16 @@ int main(void)
     Stm32_Clock_Init(432,25,2,9);   //设置时钟,216Mhz 
     delay_init(216);                //延时初始化
 	uart_init(115200);		        //串口初始化
-	usmart_dev.init(108); 		    //初始化USMART	
+//	usmart_dev.init(108); 		    //初始化USMART	
     LED_Init();                     //初始化LED
 	KEY_Init();                     //初始化按键
 	SDRAM_Init();                   //初始化SDRAM
 	LCD_Init();                     //初始化LCD
-	RS485_Init(115200);		        //初始化RS485
+//	RS485_Init(115200);		        //初始化RS485
 	ultrasonic_init();              //初始化超声波传感器
 	W25QXX_Init();				   				//初始化W25Q256
-//	PCF8574_Init();									//初始化PCF8574
-//	OV5640_Init();									//初始化OV5640
+	PCF8574_Init();									//初始化PCF8574
+	OV5640_Init();									//初始化OV5640
 	tp_dev.init();				    //初始化触摸屏
 	my_mem_init(SRAMIN);            //初始化内部内存池
 	my_mem_init(SRAMEX);            //初始化外部SDRAM内存池
@@ -194,51 +194,51 @@ int main(void)
 		OSTimeDlyHMSM(0,0,0,200,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms				  
 	}  	 
 
-//	while(OV5640_Init())//初始化OV5640
-//	{
-//		Show_Str(30,190,240,16,(u8*)"OV5640 错误!",16,0);
-//		OSTimeDlyHMSM(0,0,0,200,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
-//	    LCD_Fill(30,190,239,206,WHITE);
-//		OSTimeDlyHMSM(0,0,0,200,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
-//	}	
-//	//自动对焦初始化
-//	OV5640_RGB565_Mode();		//RGB565模式 
-//	OV5640_Focus_Init(); 
-//	OV5640_Light_Mode(0);		//自动模式
-//	OV5640_Color_Saturation(3);	//色彩饱和度0
-//	OV5640_Brightness(4);		//亮度0
-//	OV5640_Contrast(3);			//对比度0
-//	OV5640_Sharpness(33);		//自动锐度
-//	OV5640_Focus_Constant();//启动持续对焦
-//	DCMI_Init();						//DCMI配置 
+	while(OV5640_Init())//初始化OV5640
+	{
+		Show_Str(30,190,240,16,(u8*)"OV5640 错误!",16,0);
+		OSTimeDlyHMSM(0,0,0,200,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
+	    LCD_Fill(30,190,239,206,WHITE);
+		OSTimeDlyHMSM(0,0,0,200,OS_OPT_TIME_HMSM_STRICT,&err); //延时200ms
+	}	
+	//自动对焦初始化
+	OV5640_RGB565_Mode();		//RGB565模式 
+	OV5640_Focus_Init(); 
+	OV5640_Light_Mode(0);		//自动模式
+	OV5640_Color_Saturation(3);	//色彩饱和度0
+	OV5640_Brightness(4);		//亮度0
+	OV5640_Contrast(3);			//对比度0
+	OV5640_Sharpness(33);		//自动锐度
+	OV5640_Focus_Constant();//启动持续对焦
+	DCMI_Init();						//DCMI配置 
 
 	
 	
-//		
-//	qr_image_width=lcddev.width;
-//	if(qr_image_width>480)qr_image_width=480;//这里qr_image_width设置为240的倍数
-//	if(qr_image_width==320)qr_image_width=240;
-//	Show_Str(0,(lcddev.height+qr_image_width)/2+4,240,16,(u8*)"识别结果：",16,1);
-//	
-//	dcmi_line_buf[0]=mymalloc(SRAMIN,qr_image_width*2);						//为行缓存接收申请内存	
-//	dcmi_line_buf[1]=mymalloc(SRAMIN,qr_image_width*2);						//为行缓存接收申请内存
-//	rgb_data_buf=mymalloc(SRAMEX,qr_image_width*qr_image_width*2);//为rgb帧缓存申请内存
-//	
-//	dcmi_rx_callback=qr_dcmi_rx_callback;//DMA数据接收中断回调函数
-//	DCMI_DMA_Init((u32)dcmi_line_buf[0],(u32)dcmi_line_buf[1],qr_image_width/2,DMA_MDATAALIGN_HALFWORD,DMA_MINC_ENABLE);//DCMI DMA配置  
-//	fac=800/qr_image_width;	//得到比例因子
-//	OV5640_OutSize_Set((1280-fac*qr_image_width)/2,(800-fac*qr_image_width)/2,qr_image_width,qr_image_width); 
-//	DCMI_Start(); 					//启动传输	 
-//		
-//	printf("SRAM IN:%d\r\n",my_mem_perused(SRAMIN));
-//	printf("SRAM EX:%d\r\n",my_mem_perused(SRAMEX));
-//	printf("SRAM DCTM:%d\r\n",my_mem_perused(SRAMDTCM)); 
-//	
-//	atk_qr_init();//初始化识别库，为算法申请内存
-//	
-//	printf("1SRAM IN:%d\r\n",my_mem_perused(SRAMIN));
-//	printf("1SRAM EX:%d\r\n",my_mem_perused(SRAMEX));
-//	printf("1SRAM DCTM:%d\r\n",my_mem_perused(SRAMDTCM));
+		
+	qr_image_width=lcddev.width;
+	if(qr_image_width>480)qr_image_width=480;//这里qr_image_width设置为240的倍数
+	if(qr_image_width==320)qr_image_width=240;
+	Show_Str(0,(lcddev.height+qr_image_width)/2+4,240,16,(u8*)"识别结果：",16,1);
+	
+	dcmi_line_buf[0]=mymalloc(SRAMIN,qr_image_width*2);						//为行缓存接收申请内存	
+	dcmi_line_buf[1]=mymalloc(SRAMIN,qr_image_width*2);						//为行缓存接收申请内存
+	rgb_data_buf=mymalloc(SRAMEX,qr_image_width*qr_image_width*2);//为rgb帧缓存申请内存
+	
+	dcmi_rx_callback=qr_dcmi_rx_callback;//DMA数据接收中断回调函数
+	DCMI_DMA_Init((u32)dcmi_line_buf[0],(u32)dcmi_line_buf[1],qr_image_width/2,DMA_MDATAALIGN_HALFWORD,DMA_MINC_ENABLE);//DCMI DMA配置  
+	fac=800/qr_image_width;	//得到比例因子
+	OV5640_OutSize_Set((1280-fac*qr_image_width)/2,(800-fac*qr_image_width)/2,qr_image_width,qr_image_width); 
+	DCMI_Start(); 					//启动传输	 
+		
+	printf("SRAM IN:%d\r\n",my_mem_perused(SRAMIN));
+	printf("SRAM EX:%d\r\n",my_mem_perused(SRAMEX));
+	printf("SRAM DCTM:%d\r\n",my_mem_perused(SRAMDTCM)); 
+	
+	atk_qr_init();//初始化识别库，为算法申请内存
+	
+	printf("1SRAM IN:%d\r\n",my_mem_perused(SRAMIN));
+	printf("1SRAM EX:%d\r\n",my_mem_perused(SRAMEX));
+	printf("1SRAM DCTM:%d\r\n",my_mem_perused(SRAMDTCM));
 	
 	
 
@@ -557,7 +557,7 @@ void ov5640_task(void *p_arg)
 				qr_show_image((lcddev.width-qr_image_width)/2,(lcddev.height-qr_image_width)/2,qr_image_width,qr_image_width,rgb_data_buf);
 				qr_decode(qr_image_width,rgb_data_buf);
 			}
-			printf("1\r\n");
+//			printf("1\r\n");
 		}
 
 }
@@ -650,36 +650,41 @@ void ultrasonic_task(void *p_arg)
 	}
 }
 
+u8 USART_RX_FLAG;
+u16 USART_RX_STORAGE;
 
 void AGV_guide_task(void *p_arg)
 {
-	u8 key;
-	u8 rs485buf[10],temp,i=0,t=0;
-	u8 cnt=0;
-	
+	u8 len;
+	u16 usart_rx_ss;
+
 	OS_ERR err;
 	p_arg = p_arg;
 	
 	while(1)
 	{
-		key=KEY_Scan(0);
-		if(key==KEY0_PRES)//KEY0按下,发送一次数据
-		{
-			for(i=0;i<5;i++)
-			{
-				rs485buf[i]=cnt+i;//填充发送缓冲区
-				LCD_ShowxNum(30+i*32,190,rs485buf[i],3,16,0X80);	//显示数据
- 			}
-			RS485_Send_Data(rs485buf,5);//发送5个字节 									   
-		}		 
-		RS485_Receive_Data(rs485buf,&key);
-		if(key)//接收到有数据
-		{
-			if(key>5)key=5;//最大是5个数据.
- 			for(i=0;i<key;i++)LCD_ShowxNum(30+i*32,300,rs485buf[i],3,16,0X80);	//显示数据
- 		}
+		if(USART_RX_STA&0x8000)
+		{					   
+			len=USART_RX_STA&0x3fff;//得到此次接收到的数据长度
+			HAL_UART_Transmit(&UART1_Handler,(uint8_t*)USART_RX_BUF,len,1000);	//发送接收到的数据
+			while(__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_TC)!=SET);		//等待发送结束
 
-		OSTimeDlyHMSM(0,0,0,10,OS_OPT_TIME_HMSM_STRICT,&err); //延时100ms
+//			printf("\r\n\r\n");//插入换行
+			USART_RX_STA=0;
+		}
+		OSTimeDlyHMSM(0,0,0,50,OS_OPT_TIME_HMSM_STRICT,&err); //延时100ms
+			
+		if(USART_RX_FLAG==1)
+		{
+			USART_RX_STORAGE++;
+			usart_rx_ss=USART_RX_STORAGE-USART_RX_STA;
+			if(usart_rx_ss>2)
+			{
+				USART_RX_STA|=0x8000;
+				USART_RX_STORAGE=0;
+				USART_RX_FLAG=0;
+			}
+		}
 		
 	}
 }

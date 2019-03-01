@@ -56,6 +56,10 @@ u16 USART_RX_STA=0;       //接收状态标记
 u8 aRxBuffer[RXBUFFERSIZE];//HAL库使用的串口接收缓冲
 UART_HandleTypeDef UART1_Handler; //UART句柄
 
+
+extern u16 USART_RX_STORAGE;
+extern u8 USART_RX_FLAG;
+
 //初始化IO 串口1 
 //bound:波特率
 void uart_init(u32 bound)
@@ -112,26 +116,34 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 		{
-			if(USART_RX_STA&0x4000)//接收到了0x0d
-			{
-				if(aRxBuffer[0]!=0x0a)USART_RX_STA=0;//接收错误,重新开始
-				else USART_RX_STA|=0x8000;	//接收完成了 
-			}
-			else //还没收到0X0D
-			{	
-				if(aRxBuffer[0]==0x0d)USART_RX_STA|=0x4000;
-				else
-				{
+//			if(USART_RX_STA&0x4000)//接收到了0x0d
+//			{
+//				if(aRxBuffer[0]!=0x0a)USART_RX_STA=0;//接收错误,重新开始
+//				else USART_RX_STA|=0x8000;	//接收完成了 
+//			}
+//			else //还没收到0X0D
+//			{	
+//				if(aRxBuffer[0]==0x0d)USART_RX_STA|=0x4000;
+//				else
+//				{
 					USART_RX_BUF[USART_RX_STA&0X3FFF]=aRxBuffer[0] ;
 					USART_RX_STA++;
-					if(USART_RX_STA>(USART_REC_LEN-1))USART_RX_STA=0;//接收数据错误,重新开始接收	  
-				}		 
-			}
+			        USART_RX_STORAGE=USART_RX_STA;
+					if(USART_RX_STA>(USART_REC_LEN-1))
+					{
+						USART_RX_STA=0;//接收数据错误,重新开始接收	  
+						USART_RX_STORAGE=0;
+						USART_RX_FLAG=0;
+					}
+//				}		 
+//			}
 		}
 
 	}
 }
  
+
+
 //串口1中断服务程序
 void USART1_IRQHandler(void)                	
 { 
@@ -140,6 +152,8 @@ void USART1_IRQHandler(void)
 #if SYSTEM_SUPPORT_OS	 	//使用OS
 	OSIntEnter();    
 #endif
+	
+	USART_RX_FLAG=1;
 	
 	HAL_UART_IRQHandler(&UART1_Handler);	//调用HAL库中断处理公用函数
 	
